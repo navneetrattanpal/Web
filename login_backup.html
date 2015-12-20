@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <link rel="stylesheet prefetch" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet prefetch" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+  </head>
+
+  <body>
+<form id="login">
+  Username:<br>
+  <input type="text" name="username" id="username">
+  <br>
+  Password:<br>
+  <input type="password" name="userPassword" id="userPassword">
+  <br>
+  <input type="submit" id="submit" value="Login" />
+  
+</form>
+
+
+  <script type="text/javascript">
+      Parse.initialize("7gcPFFezfqWyd0P8zTvT0ugNFyxZFsfcsnavfKCO", "sknY8pNfIw12NV4tcjdZv7xAPPxzWLkw3y10vWtl");
+      
+      //$("#loginin").submit(function(event){
+
+
+      /***** Login*********/
+      $("#login").submit(function(event){
+      event.preventDefault();
+
+      /***** LOG IN *********/
+      var login_username = $("#username").val();
+      var login_password = $("#userPassword").val();
+
+      Parse.User.logIn(login_username, login_password, {
+        success: function(user){
+          //alert("Log in Success!");
+		  window.location.href = "welcome.html";
+		  
+        }, error: function(user, error){
+          console.log("Log In Error: " + error.message);
+		  alert("Log In Error: " + error.message);
+        }
+      });
+    });
+	 
+	  
+    </script>
+
+</body>
+</html>

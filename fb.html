@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <link rel="stylesheet prefetch" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet prefetch" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+  </head>
+
+  <body>
+<script>
+   Parse.initialize("7gcPFFezfqWyd0P8zTvT0ugNFyxZFsfcsnavfKCO", "sknY8pNfIw12NV4tcjdZv7xAPPxzWLkw3y10vWtl");
+
+$(document).ready(function() {
+
+        window.fbAsyncInit = function() {
+            Parse.FacebookUtils.init({
+            appId      : '427140340811872',
+            <!--channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel File-->
+            status     : true,
+            cookie     : true,
+            xfbml      : true
+            });
+
+//function fblogin() {
+
+                Parse.FacebookUtils.logIn(null, {
+                    success: function(user) {
+                        if (!user.existed()) {
+                            alert("User signed up and logged in through Facebook!");
+                        } else {
+                            alert("User logged in through Facebook!");
+                        }
+                        },
+                        error: function(user, error) {
+                        alert("User cancelled the Facebook login or did not fully authorize.");
+                    }
+                });
+            //}
+        };
+
+
+    });
+
+// Load the SDK Asynchronously
+(function(d, s, id){
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {return;}
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+</script>
+
+
+<!-- LOGIN -->
+<div data-role="page" id="login">
+    <div data-role="header">
+        <h1>Iniciar sesion</h1>
+    </div>
+    <div data-role="content">
+
+        <div class="fb-login-button" id="fblogin" data-show-faces="false" data-width="300" data-max-rows="1"></div>
+        <form id="login" >
+            <label>Email:</label>
+            <input type="email" id="emailLogin" name="email"  />
+            <label>Password:</label>
+            <input type="password" id="passLogin" name="pass"  />
+            <input type="submit" value="Login" id="buttonLogin" data-role="button" data-theme="b">
+            <a href="#signup" data-role="button">Registrarme</a>
+        </form>
+    </div>
+</div>
+</body>
+
+</html>

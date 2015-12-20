@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <link rel="stylesheet prefetch" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet prefetch" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+  </head>
+
+  <body>
+<strong><div id="username"></div></strong>
+
+<button id="logoutBtn">Logout</button> 
+
+<br>
+<strong>Students List</strong>
+<div id="results-table" align="center">
+
+</div>
+
+
+  <script type="text/javascript">
+      Parse.initialize("7gcPFFezfqWyd0P8zTvT0ugNFyxZFsfcsnavfKCO", "sknY8pNfIw12NV4tcjdZv7xAPPxzWLkw3y10vWtl");
+	  
+	  
+		// After this, the playerName field will be empty
+		var user = new Parse.User();
+		user.unset("mandy");
+		
+		// Saves the field deletion to the Parse Cloud
+		user.save();
+		
+		
+		var currUser = Parse.User.current;
+		//alert(currUser.attributes.username);
+		//alert(Parse.User.current().getUsername());
+		
+		if(currUser){
+		  $("#username").html("Welcome, " + Parse.User.current().getUsername() + "<br/> ROLE: [" + Parse.User.current().get("role") + "]");
+		  }
+		else{
+		  }
+	  
+	   /***** Logout*********/
+	  $("#logoutBtn").click(function(){
+			//Parse.User.logOut();
+
+			//var currentUser = Parse.User.current();	
+			 var currUser = Parse.User.current();
+			 if(currUser){
+			  Parse.User.logOut();
+			  window.location.href = "login.html";
+			  }
+		  else{
+			  
+			  }
+			//$("#user").html(" ");
+			//$("#logoutInfo").css("display","none");			
+	  });
+
+
+		  
+	var query = new Parse.Query(Parse.User);
+	query.equalTo("role", "Student"); 
+    query.find({
+     success: function(results) {
+		 $('#results-table').append("<table class='table-striped table-hover table-bordered' width='20%' border=1><tr><th>Student</th><th>Click To Remove</th></tr></table>");
+		 for (var i = 0; i < results.length; i++) { 
+           var object = results[i];
+		   //alert(object.get('classname'));
+               (function($) {
+                   //$('#results-table').append('<table border=1><tr><td>' + object.get('teachername') + '</td>' +
+								//'<td><a href=#?data=>' + object.get('classname') + '</a></td></tr></table>');
+				   $('#results-table').append("<table class='table-striped table-hover table-bordered' width='20%' border=1><tr><td>"+ object.get('username') +"</td><td><a href=removeStudents.html?username="+ object.get('username') +">Remove</a></td></tr></table>");
+               })(jQuery);
+       }
+        // Iterate over results and grab the lat/long coordinates
+     },
+     error: function(error) {
+        // Something went wrong
+     }
+  });  
+	
+	
+	  
+    </script>
+
+</body>
+</html>

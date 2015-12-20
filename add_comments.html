@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Post Thoughts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <link rel="stylesheet prefetch" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet prefetch" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+  </head>
+
+  <body>
+<form id="addComments">
+  Role:<br>
+  <input type="text" name="role" id="role" readonly>
+  <br>
+  Username:<br>
+  <input type="text" name="userName" id="userName" readonly>
+  <br>
+   Class:<br>
+  <input type="text" name="className" id="className" readonly>
+  <br>
+  Comment:<br>
+  <textarea name="Comment" id="Comment"></textarea>
+  <br>
+  <input type="submit" id="submit" value="Add Comments" />
+</form><br><br>
+
+<strong>View the Comments</strong>
+<div id="results-table" align="center">
+</div>
+
+
+  <script type="text/javascript">
+      Parse.initialize("7gcPFFezfqWyd0P8zTvT0ugNFyxZFsfcsnavfKCO", "sknY8pNfIw12NV4tcjdZv7xAPPxzWLkw3y10vWtl");
+      
+      //$("#loginin").submit(function(event){
+	
+	/***** Get classname from URL *********/
+	function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+	vars[key] = value;
+	});
+	return vars;
+	}
+	var role = getUrlVars()["role"];
+	var name = getUrlVars()["name"];
+	var classname = getUrlVars()["class"];
+	//var thoughts = getUrlVars()["thoughts"];
+/*	alert(role);
+	alert(name);
+	alert(classname);
+	alert(thoughts);*/
+
+
+	
+	$('#role').val(role);
+	$('#userName').val(name);
+	$('#className').val(classname);
+	//alert(classUrl);
+	
+      /***** Add Thoughts*********/
+      $("#postThoughts").submit(function(event){
+        event.preventDefault();
+		
+		//alert(Parse.User.current().getUsername());
+		var student = Parse.User.current().getUsername();
+		var role = Parse.User.current().get("role");
+		var className = $("#className").val();
+        var thought = $("#thoughts").val();
+		
+		var Thoughts  = Parse.Object.extend("Thoughts");
+        var thoughts = new Thoughts();
+		thoughts.set("student", student);
+		thoughts.set("role", role);
+        thoughts.set("classname", className);
+		thoughts.set("thoughts", thought);
+ 		
+ 
+        thoughts.save({
+          success: function(thoughts){
+            alert("Thoughts added by "+ student + " for class " + className);
+        }, error: function( thoughts, error){
+            console.log("Error: " + error.message);
+			alert("Error: "  + error.message);
+        }
+    });
+		
+   });
+	  
+      /***** View Thoughts *********/
+	  var query = new Parse.Query("Thoughts");
+    query.find({
+     success: function(results) {
+		 $('#results-table').append("<table width='50%' class='table-striped table-hover table-bordered'><tr><th>Role</th><th>Name</th><th>Class</th><th>Thoughts</th><th>Comments</th></tr></table>");
+		 for (var i = 0; i < results.length; i++) { 
+           var object = results[i];
+		   //alert(object.get('classname'));
+               (function($) {
+				   $('#results-table').append("<table width='50%' class='table-striped table-hover table-bordered'  ><tr><td>"+ object.get('role') +"</td><td>"+ object.get('student') +"</td><td>"+ object.get('classname') +"</td><td>"+ object.get('thoughts') +"</td></td><td><a href=add_comments.html?role="+ object.get('student') +"&name="+object.get('classname') +"&class="+object.get('classname') +"&thoughts="+object.get('thoughts') +">Click To Comment</a></td></tr></table>");
+               })(jQuery);
+       }
+        // Iterate over results and grab the lat/long coordinates
+     },
+     error: function(error) {
+        // Something went wrong
+     }
+  });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <link rel="stylesheet prefetch" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet prefetch" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+  </head>
+
+  <body>
+<div class="container" style="background-color:#000000">
+<div class="jumbotron" style="height:550px;background-color:#999"> 
+<strong><div id="username"></div></strong>
+<div style="margin-left:40%;margin-top:-40px">
+<!--<button id="logoutBtn" class="btn btn-info btn-lg" > 
+<span class="glyphicon glyphicon-log-out" ></span> Log out
+</button> -->
+<button type="button" class="btn btn-danger" id="logoutBtn" >Logout</button>
+
+</div>
+<br>
+
+<div id="addClass">
+<form id="addClassForm" role="form">
+<div class="form-group">
+    <label for="add_class">Add Class Name:</label><br/>
+    <input type="text" name="className" id="className">
+</div>
+<div class="form-group">
+<input type="submit" id="submit" class="btn btn-success" value="Add Class" /></div>
+</form>
+</div>
+
+
+<br>
+
+<div id="enterClass">
+<form id="enterClassForm">
+ Enter Class:<br>
+  <!--<div id="classFromDB">
+  </div>-->
+  <select id="enterteacherName" name="enterteacherName">
+    <option>Select Teacher</option>
+</select><br><br>
+<select id="enterclassName" name="enterclassName">
+    <option>Select Class Name</option>
+</select>
+<br>
+<br>
+<input type="submit" id="submit" value="Enter Class" class="btn btn-success" />
+</form>
+</div>
+<br>
+
+
+<!--<div id="show_students">
+<a href="students_list.html">Students List</a>
+</div>-->
+
+<div id="enterClass1" align="left" style="margin-top:-110px">
+<strong>All Classes taught by the Teacher</strong>
+<div id="enter-class" align="left">
+</div>
+</div>
+<div id="imageShow" align="left" style="margin-bottom:-270px">
+<img src="images/class1.jpg" height="250px"/>
+</div>
+
+
+<div id="postThoughts" align="right" style="margin-top:-108px">
+<strong>Click on the class and post your thoughts!!!</strong>
+<div id="results-table" align="right">
+</div>
+</div>
+
+<div id="postThoughts1" align="right" style="margin-top:-108px">
+<strong>Click on the class and post your thoughts!!!</strong>
+<div id="results-table1" align="right">
+</div>
+</div>
+</div>
+</div>
+
+  <script type="text/javascript">
+      Parse.initialize("7gcPFFezfqWyd0P8zTvT0ugNFyxZFsfcsnavfKCO", "sknY8pNfIw12NV4tcjdZv7xAPPxzWLkw3y10vWtl");
+	  
+		var currUser = Parse.User.current;
+		//alert(Parse.User.current().getUsername());
+		//alert(currUser.attributes.username);
+		//alert(Parse.User.current().getUsername());
+		
+		if(currUser){
+		  $("#username").html("Welcome, " + Parse.User.current().getUsername() + "<br/> ROLE: [" + Parse.User.current().get("role") + "]");
+		  }
+		else{
+		  }
+	  
+	  /***** Add Class*********/
+      $("#addClassForm").submit(function(event){
+        event.preventDefault();
+		
+		//alert(Parse.User.current().id);
+		//return false;
+        var teacherClassName = $("#className").val();
+		
+		var Class  = Parse.Object.extend("Class");
+        var classes = new Class();
+        classes.set("classname", teacherClassName);
+ 		classes.set("teachername", Parse.User.current().getUsername());
+		//classes.set("teacherID", Parse.User.current().id);//changes
+		//classes.set("teacherID", new Class({id: Parse.User.current().id}));
+		//classes.set("teacherID", { __type: "Pointer", className: "Class", objectId: "Parse.User.current().id" });//changes
+ 
+        classes.save({
+          success: function(classes){
+            alert("New Class Added by "+ Parse.User.current().getUsername());
+			window.location.href = "welcome.html";
+        }, error: function( classes, error){
+            console.log("Error: " + error.message);
+			alert("Error: "  + error.message);
+        }
+    });
+		
+   });
+	  
+ 
+	  /***** Enter Class*********/
+      $("#enterClassForm").submit(function(event){
+        event.preventDefault();
+		
+		//alert('hi');
+		//return false;
+		
+		//alert(Parse.User.current().getUsername());
+		var enterteacherName = $("#enterteacherName").val();
+        var enterclassName = $("#enterclassName").val();
+		
+		var EnterClass  = Parse.Object.extend("EnterClass");
+        var EnterClassess = new EnterClass();
+		EnterClassess.set("studentname", Parse.User.current().getUsername());
+        EnterClassess.set("classname", enterclassName);
+		EnterClassess.set("teachername", enterteacherName);
+ 
+        EnterClassess.save({
+          success: function(classes){
+            alert("A student "+Parse.User.current().getUsername() +" has entered class");
+			window.location.href = "welcome.html";
+
+        }, error: function( classes, error){
+            console.log("Error: " + error.message);
+			alert("Error: "  + error.message);
+        }
+    });
+		
+   });	  
+	   /***** Logout*********/
+	  $("#logoutBtn").click(function(){
+			//Parse.User.logOut();
+
+			//var currentUser = Parse.User.current();	
+			 var currUser = Parse.User.current();
+			 if(currUser){
+			  Parse.User.logOut();
+			  window.location.href = "login.html";
+			  }
+		  else{
+			  
+			  }
+			//$("#user").html(" ");
+			//$("#logoutInfo").css("display","none");			
+	  });
+
+
+		/***** Check the role*********/
+	  if(Parse.User.current().get("role") == 'Teacher'){
+		  $("#addClass").show();
+		  $("#show_students").show();
+		   $("#enterClass").hide();
+		   $("#postThoughts1").hide();
+		   $("#enterClass1").hide();
+		 //$("#postThoughts").hide();
+		  }
+	  else{
+		  $("#postThoughts").show();
+		  $("#imageShow").hide();
+		  $("#addClass").hide();
+		  $("#show_students").hide();
+		  $("#postThoughts").hide();
+		  //$("#results-table1").show();
+
+		  }
+		  
+		  
+	var query = new Parse.Query("Class");
+    query.find({
+     success: function(results) {
+		 $('#results-table').append("<table class='table-striped table-hover table-bordered' width='30%' border=1><tr><th width='20%' style='background-color:#006699;color:white'>Teacher</th><th style='background-color:#006699;color:white'>Class</th></tr></table>");
+		 
+		 	//show all list 
+		  $('#enter-class').append("<table class='table-striped table-hover table-bordered' width='30%' border=1><tr><th width='20%' style='background-color:#006699;color:white'>Teacher</th><th style='background-color:#006699;color:white'>Class</th></tr></table>");
+		 
+		 var select = document.getElementById("enterclassName");
+		 //var results = ["1", "2", "3", "4", "5"];
+
+		 for (var i = 0; i < results.length; i++) { 
+		/***** Class name dropdown from database*********/
+		var opt = results[i];
+		var el = document.createElement("option");
+		el.textContent = opt.get('classname');
+		el.value = opt.get('classname');
+		select.appendChild(el);
+		
+        var object = results[i];
+		   //alert(results.length);
+               (function($) {
+                   //$('#results-table').append('<table border=1><tr><td>' + object.get('teachername') + '</td>' +
+								//'<td><a href=#?data=>' + object.get('classname') + '</a></td></tr></table>');
+				   //alert(Parse.User.current().getUsername());
+				   if(Parse.User.current().getUsername() == object.get('teachername')){
+					   var className = "<td><a style='text-decoration:none;color:green' href=post_thoughts.html?classname="+object.get('classname') +">"+ object.get('classname') +"</a></td>";
+					   }
+					   else{
+						var className = "<td>"+ object.get('classname') +"</td>";
+						   }
+				   $('#results-table').append("<table class='table-striped table-hover table-bordered' width='30%' border=1><tr class='info'><td width='20%' style='color:#993300;font-weight: bold;'>"+ object.get('teachername') +"</td>"+className+"</td></tr></table>");
+				   
+				   //show all list 
+				    $('#enter-class').append("<table class='table-striped table-hover table-bordered' width='30%' border=1><tr class='info'><td width='20%' style='color:#993300;font-weight: bold;'>"+ object.get('teachername') +"</td><td style='color:green'>"+ object.get('classname') +"</td></td></tr></table>");
+				   
+				  
+				   
+               })(jQuery);
+       }
+	   
+	   
+        // Iterate over results and grab the lat/long coordinates
+     },
+     error: function(error) {
+        // Something went wrong
+     }
+  });  
+	
+	
+	var query1 = new Parse.Query("EnterClass");
+	query1.equalTo("studentname", Parse.User.current().getUsername()); 
+    query1.find({
+     success: function(results) {
+		//$('#results-table1').append("<table class='table-striped table-hover table-bordered' width='10%' border=1><tr><th>Teacher</th><th>Class</th></tr></table>");
+		 		 $('#results-table1').append("<table class='table-striped table-hover table-bordered' width='30%' border=1><tr><th width='20%' style='background-color:#006699;color:white'>Teacher</th><th style='background-color:#006699;color:white'>Class</th></tr></table>");
+
+		 for (var i = 0; i < results.length; i++) { 
+           var object = results[i];
+		   //alert(object.get('classname'));
+               (function($) {
+                   //$('#results-table').append('<table border=1><tr><td>' + object.get('teachername') + '</td>' +
+								//'<td><a href=#?data=>' + object.get('classname') + '</a></td></tr></table>');
+				   //alert(Parse.User.current().getUsername());
+
+				  // $('#results-table1').append("<table class='table-striped table-hover table-bordered' width='10%' border=1><tr><td>"+ object.get('teachername') +"</td><td><a href=post_thoughts.html?classname="+ object.get('classname') +">"+ object.get('classname') +"</a></td></td></tr></table>");
+				   
+				   $('#results-table1').append("<table class='table-striped table-hover table-bordered' width='30%' border=1><tr class='info'><td width='20%' style='color:#993300;font-weight: bold;'>"+ object.get('teachername') +"</td><td><a style='text-decoration:none;color:green' href=post_thoughts.html?classname="+ object.get('classname') +">"+ object.get('classname') +"</a></td></tr></table>");
+
+				   
+				   
+               })(jQuery);
+       }
+        // Iterate over results and grab the lat/long coordinates
+     },
+     error: function(error) {
+        // Something went wrong
+     }
+  });  
+
+	/***** Teacher name dropdown from database*********/
+	var query2 = new Parse.Query("User");
+	query2.equalTo("role", "Teacher"); 
+    query2.find({
+     success: function(results) {
+		 var select = document.getElementById("enterteacherName");
+		 //var results = ["1", "2", "3", "4", "5"];
+
+		 for (var i = 0; i < results.length; i++) { 
+		/***** Class name dropdown from database*********/
+		var opt = results[i];
+		var el = document.createElement("option");
+		el.textContent = opt.get('username');
+		el.value = opt.get('username');
+		select.appendChild(el);
+		
+       }
+        // Iterate over results and grab the lat/long coordinates
+     },
+     error: function(error) {
+        // Something went wrong
+     }
+  });  
+
+
+    </script>
+
+</body>
+</html>

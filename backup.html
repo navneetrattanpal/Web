@@ -1,0 +1,94 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+
+  <title>My Parse App</title>
+  <meta name="description" content="My Parse App">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet prefetch" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet prefetch" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+  <script type="text/javascript" src="js/register.js"></script>
+</head>
+
+<body>
+
+<form id="signup">
+  Username:<br>
+  <input type="text" name="username" id="username">
+  <br>
+  Password:<br>
+  <input type="text" name="userPassword" id="userPassword">
+  <br>
+  Role:<br>
+  <select name="userRole" id="userRole">
+  <option value="Teacher">Teacher</option>
+  <option value="Student">Student</option>
+  </select>
+  <br>
+  <input type="submit" id="submit" value="Register" />
+  <button id="signInBtn" value="Sign In">Sign In</button>
+</form>
+
+
+ <script type="text/javascript">
+    //Parse.initialize("APPLICATION_ID", "JAVASCRIPT_KEY");
+	//Parse.initialize("MvC5c3Je3W0wla9RSgRmNRAEI73qRsS0bWFdVtuV", "YSfq4HErf8CJCaDJrvabCJBpsim8ejJlMWFizNYd");
+    	   
+	
+Parse.initialize("MvC5c3Je3W0wla9RSgRmNRAEI73qRsS0bWFdVtuV", "YSfq4HErf8CJCaDJrvabCJBpsim8ejJlMWFizNYd");
+//Register starts here here
+//$(document).ready(function(){
+//alert('ddd');
+
+ 
+
+        var user = new Parse.User();
+        user.set("username", "a");
+        user.set("password", "b");
+
+        user.signUp(null, {
+          success: function(user){
+            alert("Sign up success");
+        }, error: function(user, error){
+            console.log("Sign Up Error: " + error.message);
+        }
+    });
+  
+  $("#signup").submit(function(event){
+        //event.preventDefault();
+//alert('hi');
+        var username = $("#username").val();
+        var password = $("#userPassword").val();
+		alert(username);
+        if(username == ""){
+          alert("Please, Enter your username");
+        } else if (password == "") {
+          alert("Please, Insert your password");
+        }
+
+        var user = new Parse.User();
+        user.set("username", username);
+        user.set("password", password);
+
+        user.signUp(null, {
+          success: function(user){
+            alert("Sign up success");
+        }, error: function(user, error){
+            console.log("Sign Up Error: " + error.message);
+        }
+    });
+    });
+//}
+//Register ends here	  
+		   
+	
+  </script>
+
+
+</body>
+</html>

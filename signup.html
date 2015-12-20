@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <link rel="stylesheet prefetch" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet prefetch" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+  </head>
+
+  <body>
+<form id="signup">
+  Username:<br>
+  <input type="text" name="username" id="username">
+  <br>
+  Password:<br>
+  <input type="password" name="userPassword" id="userPassword">
+  <br>
+  Role:<br>
+  <select name="userRole" id="userRole">
+  <option value="Select Role">Select Role</option>
+  <option value="Teacher">Teacher</option>
+  <option value="Student">Student</option>
+  </select>
+  <br>
+  <input type="submit" id="submit" value="Sign Up" />
+</form>
+
+
+  <script type="text/javascript">
+      Parse.initialize("7gcPFFezfqWyd0P8zTvT0ugNFyxZFsfcsnavfKCO", "sknY8pNfIw12NV4tcjdZv7xAPPxzWLkw3y10vWtl");
+      
+      //$("#loginin").submit(function(event){
+
+
+      /***** Sign UP *********/
+      $("#signup").submit(function(event){
+        event.preventDefault();
+
+        var username = $("#username").val();
+        var password = $("#userPassword").val();
+		var role = $("#userRole").val();
+
+        var user = new Parse.User();
+        user.set("username", username);
+        user.set("password", password);
+		user.set("role", role);
+
+        user.signUp(null, {
+          success: function(user){
+            alert("Sign up success");
+        }, error: function(user, error){
+            console.log("Sign Up Error: " + error.message);
+			alert("Error: "  + error.message);
+        }
+    });
+   });
+    </script>
+
+</body>
+</html>
